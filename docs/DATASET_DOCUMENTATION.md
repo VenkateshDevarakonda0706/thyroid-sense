@@ -1,6 +1,7 @@
-# Dataset Documentation: Thyroid Disease Classification
+# Dataset Documentation: ThyroidSense Thyroid Disease Classification
 
-**Project:** Thyroid Disease Detection Using Machine Learning  
+**Project:** ThyroidSense: Thyroid Disease Detection Using Machine Learning  
+**Project Identifier:** `ThyroidSense`  
 **Course Context:** B.Tech CSE (AI & ML) — Semester 2-1 Academic Project  
 **Author:** Venkatesh Devarakonda  
 **Source Origin:** UCI Machine Learning Repository (Thyroid Disease Records)  
@@ -112,3 +113,4 @@ The original string diagnoses were mapped using Scikit-Learn's `LabelEncoder`:
 - **Patient Anonymity:** The dataset is fully de-identified. It contains no names, medical record numbers, contact information, hospital admission dates, or geographic markers.
 - **License & Redistribution:** UCI datasets are standard educational benchmarks provided for open research and machine learning instruction under fair academic use.
 - **Academic Disclaimer:** This dataset and derived models are intended strictly for educational and instructional demonstration. They are **not** certified diagnostic medical devices.
+

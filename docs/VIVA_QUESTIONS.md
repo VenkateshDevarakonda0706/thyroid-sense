@@ -1,6 +1,7 @@
-# Viva & Technical Interview Preparation Guide: Thyroid Disease Detection
+# Viva & Technical Interview Preparation Guide: ThyroidSense
 
-**Project Title:** Thyroid Disease Detection Using Machine Learning  
+**Project Title:** ThyroidSense: Thyroid Disease Detection Using Machine Learning  
+**Project Identifier:** `ThyroidSense`  
 **Author:** Venkatesh Devarakonda  
 **Course Context:** B.Tech CSE (AI & ML) — Semester 2-1 Academic Viva  
 
@@ -9,12 +10,12 @@
 ## Part 1: Quick Pitches (30s, 1m, 3m)
 
 ### 1. The 30-Second Elevator Pitch
-> *"My project is 'Thyroid Disease Detection Using Machine Learning'. In this project, I developed a supervised classification system that uses patient clinical attributes and serum hormone measurements (like TSH, T3, and TT4) to detect four thyroid conditions: Compensated Hypothyroidism, Primary Hypothyroidism, Secondary Hypothyroidism, and Normal thyroid function. After cleaning the UCI dataset, handling class imbalance with Random Over-sampling, and standardizing features without data leakage, I trained and benchmarked six machine learning models. The Random Forest classifier emerged as the best model, achieving 98.58% accuracy and a 0.9857 Macro F1-score."*
+> *"My project is 'ThyroidSense: Thyroid Disease Detection Using Machine Learning'. In this project, I developed a supervised classification system that uses patient clinical attributes and serum hormone measurements (like TSH, T3, and TT4) to detect four thyroid conditions: Compensated Hypothyroidism, Primary Hypothyroidism, Secondary Hypothyroidism, and Normal thyroid function. After cleaning the UCI dataset, handling class imbalance with Random Over-sampling, and standardizing features without data leakage, I trained and benchmarked six machine learning models. The Random Forest classifier emerged as the best model, achieving 98.58% accuracy and a 0.9857 Macro F1-score."*
 
 ---
 
 ### 2. The 1-Minute Project Summary
-> *"Good morning, sir/madam. My 2-1 semester project focuses on automated screening of thyroid disorders using Machine Learning. The thyroid gland regulates metabolic rate, and diagnosing dysfunctions manually can be difficult when symptoms overlap or hormone tests are borderline.*  
+> *"Good morning, sir/madam. My 2-1 semester project, ThyroidSense, focuses on automated screening of thyroid disorders using Machine Learning. The thyroid gland regulates metabolic rate, and diagnosing dysfunctions manually can be difficult when symptoms overlap or hormone tests are borderline.*  
 > *I used the UCI Thyroid Disease benchmark dataset comprising demographic factors, clinical signs like goitre and tumor, and laboratory tests including TSH, T3, TT4, T4U, and FTI.*  
 > *A major challenge was extreme class imbalance, where healthy cases accounted for over 95% of records. I balanced the 4 primary clinical classes to 5,000 instances each and implemented a strict, leakage-free preprocessing pipeline using Scikit-Learn's StandardScaler fitted exclusively on the training split.*  
 > *I implemented and compared six supervised algorithms: Logistic Regression, Decision Tree, Random Forest, K-Nearest Neighbors, Support Vector Machine, and Naive Bayes. Random Forest achieved the highest performance with 98.58% accuracy and 0.9857 Macro F1, while Decision Tree offered the best speed-to-interpretability trade-off with 98.22% accuracy."*
@@ -22,7 +23,7 @@
 ---
 
 ### 3. The 3-Minute Comprehensive Technical Walkthrough
-> *"Good morning. I would like to walk you through the end-to-end architecture and experimental findings of my Thyroid Disease Detection project.*  
+> *"Good morning. I would like to walk you through the end-to-end architecture and experimental findings of ThyroidSense, my Thyroid Disease Detection project.*  
 > *1. **The Medical Problem:** Thyroid diseases affect metabolism, temperature, and cardiac function. While Primary Hypothyroidism involves elevated TSH and low T4, conditions like Compensated Hypothyroidism present normal T4 with mildly elevated TSH, and Secondary Hypothyroidism features low TSH due to pituitary dysfunction. Machine learning models can capture these multi-variate non-linear interactions reliably.*  
 > *2. **Data Pipeline & Hygiene:** Starting from raw UCI records with 31 columns, I eliminated non-predictive administrative attributes like patient ID and referral source, as well as redundant boolean measurement indicators. Missing values in continuous laboratory features were imputed using training set medians to maintain robustness against outliers. Categorical symptoms and biological sex were binary encoded.*  
 > *To solve severe class imbalance, I utilized Random Over-sampling to achieve an equal distribution of 5,000 samples per class across the 4 primary diagnostic categories (Compensated Hypothyroid, Negative, Primary Hypothyroid, Secondary Hypothyroid), totaling 20,000 samples.*  
@@ -278,3 +279,4 @@
   4. Testing cost-sensitive learning to penalize False Negatives more heavily than False Positives.
 - **Detailed Explanation:** Adding SHAP plots would allow a physician to see exactly which feature (e.g., TSH > 15 mIU/L) pushed the model toward a Primary Hypothyroidism diagnosis, making the system clinically trustworthy.
 - **Project Example:** SHAP force plots explaining how a high TSH value contributed +0.45 toward class 9 probability.
+

@@ -1,4 +1,4 @@
-"""Exploratory Data Analysis (EDA) Script for Thyroid Disease Detection.
+"""Exploratory Data Analysis (EDA) Script for ThyroidSense (Thyroid Disease Detection).
 
 Generates and saves publication-quality exploratory visualizations to results/figures/:
 1. class_distribution.png: Target diagnosis frequencies.
@@ -204,3 +204,4 @@ def run_all_eda():
 
 if __name__ == "__main__":
     run_all_eda()
+

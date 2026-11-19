@@ -1,4 +1,4 @@
-"""Data Preprocessing Module for Thyroid Disease Detection.
+"""Data Preprocessing Module for ThyroidSense (Thyroid Disease Detection).
 
 This module provides clear, reusable, beginner-friendly functions to:
 1. Load raw or processed thyroid disease datasets.

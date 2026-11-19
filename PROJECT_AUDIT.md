@@ -1,15 +1,16 @@
-# Project Audit: Thyroid Disease Detection Using Machine Learning
+# Project Audit: ThyroidSense (Thyroid Disease Detection Using Machine Learning)
 
+**Project Identifier:** `ThyroidSense`  
 **Audit Date:** November 2026 (Reconstruction Audit)  
 **Original Academic Period:** November 2023 – March 2024 (B.Tech CSE AIML, Semester 2-1)  
 **Auditor / Mentor:** Antigravity Project Maintainer & Code Reviewer  
-**Workspace:** `Thyroid complete`  
+**Original Workspace:** `Thyroid complete` (Migrated & Linked to `ThyroidSense`)  
 
 ---
 
 ## 1. Executive Summary
 
-A comprehensive, non-destructive audit of the entire `Thyroid complete` workspace was conducted. The project directory originally contained a mixture of files from multiple phases:
+A comprehensive, non-destructive audit of the entire workspace (`Thyroid complete`, now restructured as `ThyroidSense`) was conducted. The project directory originally contained a mixture of files from multiple phases:
 1. **The original 2-1 semester Machine Learning academic project (October 2023 – February 2024)**: Focused on UCI Thyroid Disease classification, feature engineering, missing value imputation, statistical hypothesis testing (ANOVA F-test, T-test, Z-test, Mann-Whitney U test, Jarque-Bera test), class imbalance handling, and model training (KNN, Gaussian Naive Bayes, Support Vector Machines).
 2. **Intermediate experimentation & pipeline dumps**: Numerous intermediate CSV files (`u.csv` through `u5.csv`, `Finalthyroid.csv`, `thyroidpro.csv`, etc.) generated during exploratory data cleaning.
 3. **Full-stack and web integration experiments (Early 2024 – Late 2025)**:
@@ -159,3 +160,4 @@ Per the Master Prompt instructions:
    - Unit tests (`tests/test_preprocessing.py`, `tests/test_model_training.py`).
    - Figures & Metrics tables in `results/`.
    - Comprehensive documentation (`README.md`, `docs/*.md`, `docs/VIVA_QUESTIONS.md`).
+

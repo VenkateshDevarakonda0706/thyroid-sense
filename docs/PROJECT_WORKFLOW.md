@@ -1,6 +1,7 @@
-# Project Workflow: Thyroid Disease Detection
+# Project Workflow: ThyroidSense
 
-**Project:** Thyroid Disease Detection Using Machine Learning  
+**Project:** ThyroidSense: Thyroid Disease Detection Using Machine Learning  
+**Project Identifier:** `ThyroidSense`  
 **Author:** Venkatesh Devarakonda  
 **Curriculum:** B.Tech CSE (AI & ML) — Semester 2-1 Academic Project  
 
@@ -104,3 +105,4 @@ Navigate to `notebooks/` and run the numbered notebooks in sequence:
 2. `02_data_preprocessing.ipynb`
 3. `03_model_training.ipynb`
 4. `04_model_evaluation.ipynb`
+

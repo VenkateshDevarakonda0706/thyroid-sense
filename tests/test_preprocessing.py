@@ -94,3 +94,4 @@ def test_clean_and_prepare_raw_data_removes_admin_columns():
     assert "TSH measured" not in cleaned.columns
     assert cleaned["sex"].tolist() == [0, 1]
     assert cleaned["on thyroxine"].tolist() == [0, 1]
+

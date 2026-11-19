@@ -1,6 +1,8 @@
-# Final Verification Report: Thyroid Disease Detection Project
+# Final Verification Report: ThyroidSense
 
-**Project Title:** Thyroid Disease Detection Using Machine Learning  
+**Project Title:** ThyroidSense: Thyroid Disease Detection Using Machine Learning  
+**Project Identifier:** `ThyroidSense`  
+**GitHub Repository:** [https://github.com/VenkateshDevarakonda0706/ThyroidSense](https://github.com/VenkateshDevarakonda0706/ThyroidSense)  
 **Student / Author:** Venkatesh Devarakonda  
 **Academic Context:** B.Tech CSE (AI & ML) — Semester 2-1 Academic Curriculum  
 **Verification Date:** November 2026 (Reconstructed and Validated)  
@@ -91,7 +93,8 @@ Evaluated on 4,000 stratified holdout test records (1,000 samples per class):
 
 1. **Clone the repository and enter the directory:**
    ```powershell
-   cd thyroid-detection
+   git clone https://github.com/VenkateshDevarakonda0706/ThyroidSense.git
+   cd ThyroidSense
    ```
 2. **Create and activate the virtual environment:**
    ```powershell
@@ -114,3 +117,4 @@ Evaluated on 4,000 stratified holdout test records (1,000 samples per class):
    ```powershell
    jupyter notebook notebooks/
    ```
+

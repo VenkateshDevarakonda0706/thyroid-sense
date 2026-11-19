@@ -1,4 +1,4 @@
-"""Model Training Module for Thyroid Disease Detection.
+"""Model Training Module for ThyroidSense (Thyroid Disease Detection).
 
 This module initializes, trains, and serializes the 6 traditional supervised
 Machine Learning classifiers appropriate for a 2-1 semester B.Tech CSE AIML curriculum:

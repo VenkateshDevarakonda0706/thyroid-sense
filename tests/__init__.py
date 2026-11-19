@@ -1,1 +1,3 @@
-"""Tests package for Thyroid Disease Detection."""
+"""Tests package for ThyroidSense."""
+
+

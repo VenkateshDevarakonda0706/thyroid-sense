@@ -1,4 +1,4 @@
-"""Model Evaluation and Comparison Module for Thyroid Disease Detection.
+"""Model Evaluation and Comparison Module for ThyroidSense (Thyroid Disease Detection).
 
 This module computes comprehensive classification performance metrics for all 6 models:
 - Accuracy
@@ -280,3 +280,4 @@ if __name__ == "__main__":
     print("FINAL MODEL COMPARISON TABLE:")
     print("=" * 60)
     print(df_results.to_string(index=False))
+

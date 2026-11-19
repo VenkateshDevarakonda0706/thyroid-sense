@@ -1,12 +1,13 @@
-# Thyroid Disease Detection Using Machine Learning
+# ThyroidSense: Thyroid Disease Detection Using Machine Learning
 
 [![Python](https://img.shields.io/badge/Python-3.11-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org/)
 [![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.9.1-F7931E.svg?style=flat&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
 [![Pandas](https://img.shields.io/badge/Pandas-3.1.1-150458.svg?style=flat&logo=pandas&logoColor=white)](https://pandas.pydata.org/)
 [![Tests](https://img.shields.io/badge/Tests-Passing%20(9%2F9)-brightgreen.svg?style=flat)](tests/)
+[![Repository](https://img.shields.io/badge/GitHub-ThyroidSense-blue.svg?style=flat&logo=github)](https://github.com/VenkateshDevarakonda0706/ThyroidSense)
 [![Status](https://img.shields.io/badge/Academic%20Project-B.Tech%20CSE%20AIML-blue.svg?style=flat)]()
 
-An end-to-end Machine Learning classification project designed, implemented, and benchmarked for undergraduate computer science and AI/ML students. This project classifies patients into four thyroid diagnostic states using clinical symptoms and objective serum hormone measurements from the UCI Thyroid Disease dataset.
+**ThyroidSense** is an end-to-end Machine Learning classification project designed, implemented, and benchmarked for undergraduate computer science and AI/ML students. This project classifies patients into four thyroid diagnostic states using clinical symptoms and objective serum hormone measurements from the UCI Thyroid Disease dataset.
 
 ---
 
@@ -37,7 +38,9 @@ An end-to-end Machine Learning classification project designed, implemented, and
 
 ## 1. Project Title & Introduction
 
-**Title:** Thyroid Disease Detection Using Machine Learning  
+**Project Title:** ThyroidSense: Thyroid Disease Detection Using Machine Learning  
+**Project Identifier:** `ThyroidSense`  
+**GitHub Repository:** [https://github.com/VenkateshDevarakonda0706/ThyroidSense](https://github.com/VenkateshDevarakonda0706/ThyroidSense)  
 **Author:** Venkatesh Devarakonda  
 **Academic Context:** B.Tech Computer Science & Engineering (AI & ML) — Semester 2-1 Academic Project  
 
@@ -144,12 +147,13 @@ For full medical documentation, see [DATASET_DOCUMENTATION.md](docs/DATASET_DOCU
 ## 7. Project Folder Structure
 
 ```
-Thyroid complete/
+ThyroidSense/
 ├── README.md                      # Master project documentation
 ├── requirements.txt               # Pinned Python package dependencies
 ├── .gitignore                     # Git ignore rules for caches & environments
 ├── PROJECT_AUDIT.md               # Detailed audit and file disposition log
 ├── FINAL_VERIFICATION_REPORT.md   # Final test results and verification report
+├── GITHUB_SETUP_REPORT.md         # GitHub repository setup, security & audit log
 │
 ├── data/
 │   ├── README.md                  # Dataset descriptions
@@ -204,8 +208,8 @@ Thyroid complete/
 
 1. **Clone the repository:**
    ```bash
-   git clone <repo_url>
-   cd "Thyroid complete"
+   git clone https://github.com/VenkateshDevarakonda0706/ThyroidSense.git
+   cd ThyroidSense
    ```
 2. **Create and activate a virtual environment:**
    ```powershell
@@ -425,3 +429,4 @@ This project successfully reconstructs, standardizes, and benchmarks a complete 
 - **Author:** Venkatesh Devarakonda (B.Tech CSE AI & ML)
 - **Dataset:** UCI Machine Learning Repository (Garavan Institute of Medical Research & J. Ross Quinlan)
 - **Academic Mentor & Code Review:** Antigravity AI Maintainer
+

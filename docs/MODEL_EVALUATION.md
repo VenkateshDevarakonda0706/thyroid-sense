@@ -1,6 +1,7 @@
-# Model Evaluation and Benchmark Report: Thyroid Disease Detection
+# Model Evaluation and Benchmark Report: ThyroidSense
 
-**Project:** Thyroid Disease Detection Using Machine Learning  
+**Project:** ThyroidSense: Thyroid Disease Detection Using Machine Learning  
+**Project Identifier:** `ThyroidSense`  
 **Author:** Venkatesh Devarakonda  
 **Evaluation Set:** 4,000 Stratified Holdout Test Records (1,000 samples per class)  
 **Execution Environment:** Isolated Python 3.11 Virtual Environment  
@@ -99,3 +100,4 @@ All models were evaluated on the exact same holdout test set of 4,000 patient re
 > 3. False negatives can lead to life-threatening complications (e.g., myxedema coma).
 > 
 > Therefore, this software must **NEVER** be used as a substitute for certified medical diagnosis.
+

@@ -1,6 +1,7 @@
-# Machine Learning Models Explanation: Thyroid Disease Detection
+# Machine Learning Models Explanation: ThyroidSense
 
-**Project:** Thyroid Disease Detection Using Machine Learning  
+**Project:** ThyroidSense: Thyroid Disease Detection Using Machine Learning  
+**Project Identifier:** `ThyroidSense`  
 **Author:** Venkatesh Devarakonda  
 **Course Context:** B.Tech CSE (AI & ML) — Semester 2-1 Academic Curriculum  
 
@@ -87,3 +88,4 @@ In this project, we implement and benchmark six fundamental supervised classific
 - **Why it fails on this dataset (64.98% Accuracy):**
   1. The conditional independence assumption is heavily violated: blood markers like `TT4`, `T4U`, and `FTI` are biologically co-dependent ($\text{FTI} \approx \text{TT4}/\text{T4U}$).
   2. Severe skewness in hormone values violates the Gaussian bell-curve assumption.
+

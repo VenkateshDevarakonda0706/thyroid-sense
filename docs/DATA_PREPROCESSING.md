@@ -1,6 +1,7 @@
-# Data Preprocessing Documentation: Thyroid Disease Detection
+# Data Preprocessing Documentation: ThyroidSense
 
-**Project:** Thyroid Disease Detection Using Machine Learning  
+**Project:** ThyroidSense: Thyroid Disease Detection Using Machine Learning  
+**Project Identifier:** `ThyroidSense`  
 **Author:** Venkatesh Devarakonda  
 **Course Context:** B.Tech CSE (AI & ML) — Semester 2-1  
 
@@ -119,3 +120,4 @@ Where:
   X_test_scaled = scaler.transform(X_test)        # Use train mu & sigma on test
   ```
 - This guarantees zero information from the test evaluation leaks into the training pipeline.
+

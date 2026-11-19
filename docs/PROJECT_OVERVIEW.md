@@ -1,6 +1,8 @@
-# Project Overview: Thyroid Disease Detection Using Machine Learning
+# Project Overview: ThyroidSense — Thyroid Disease Detection Using Machine Learning
 
-**Project Title:** Thyroid Disease Detection Using Machine Learning  
+**Project Title:** ThyroidSense: Thyroid Disease Detection Using Machine Learning  
+**Project Identifier:** `ThyroidSense`  
+**GitHub Repository:** [https://github.com/VenkateshDevarakonda0706/ThyroidSense](https://github.com/VenkateshDevarakonda0706/ThyroidSense)  
 **Author:** Venkatesh Devarakonda  
 **Degree / Curriculum:** B.Tech Computer Science & Engineering (AI & ML) — Semester 2-1  
 **Project Category:** Supervised Machine Learning & Clinical Decision Support  
@@ -10,7 +12,7 @@
 
 ## 1. Executive Summary
 
-Thyroid disorders affect hundreds of millions of individuals globally. Because symptoms like fatigue, weight fluctuations, mood changes, and temperature sensitivity overlap with numerous common ailments, clinical diagnosis heavily relies on comprehensive serum blood tests measuring thyroid hormones.
+**ThyroidSense** is an academic Machine Learning project that develops an end-to-end classification system for thyroid disease detection. Thyroid disorders affect hundreds of millions of individuals globally. Because symptoms like fatigue, weight fluctuations, mood changes, and temperature sensitivity overlap with numerous common ailments, clinical diagnosis heavily relies on comprehensive serum blood tests measuring thyroid hormones.
 
 This project delivers an end-to-end Machine Learning pipeline that analyzes patient clinical attributes, demographic factors, and endocrine laboratory measurements to classify patients into four distinct thyroid diagnostic states:
 1. **Compensated Hypothyroid:** Early/subclinical stage of thyroid underactivity.
@@ -96,3 +98,4 @@ Accurately interpreting thyroid panels can be complex when patients exhibit subt
 - **Reproducible Science:** Controlled random states guarantee identical metric reproduction across platforms.
 - **Full Test Coverage:** Automated unit test suite (`pytest`) verifies preprocessing logic, split proportions, scaler leak prevention, and model inference.
 - **Academic Preservation:** Preserves and validates the student's original semester 2-1 findings while upgrading the codebase to production standards.
+

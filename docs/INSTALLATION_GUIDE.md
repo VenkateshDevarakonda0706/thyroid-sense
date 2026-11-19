@@ -1,6 +1,7 @@
-# Installation and Setup Guide: Thyroid Disease Detection
+# Installation and Setup Guide: ThyroidSense
 
-**Project:** Thyroid Disease Detection Using Machine Learning  
+**Project:** ThyroidSense: Thyroid Disease Detection Using Machine Learning  
+**Project Identifier:** `ThyroidSense`  
 **Author:** Venkatesh Devarakonda  
 **Target Environment:** Windows, macOS, or Linux (Python 3.9 to 3.12)  
 
@@ -19,8 +20,9 @@
 
 ### Step 1: Clone or Navigate to the Repository
 Open PowerShell or your preferred terminal:
-```powershell
-cd "path/to/thyroid-detection"
+```bash
+git clone https://github.com/VenkateshDevarakonda0706/ThyroidSense.git
+cd ThyroidSense
 ```
 
 ### Step 2: Create an Isolated Virtual Environment
@@ -120,3 +122,4 @@ jupyter notebook notebooks/
   ```powershell
   $env:PYTHONPATH = "$((Get-Location).Path)"
   ```
+
