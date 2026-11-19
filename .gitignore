@@ -1,0 +1,52 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+.env.local
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Local cache & plotting state
+.matplotlib/
+scratch/
+
+# Operating system artifacts
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE and Editor configuration
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Sensitive credentials & environment files
+.env
+*.pem
+*.key
+
+# Legacy scratch archives & fullstack sub-apps
+archive/legacy_csvs/
+archive/legacy_notebooks/
+archive/PROJECT_legacy/
+archive/web_frontend/
+archive/server_sanitized/
+archive/fastapi_app/
+archive/flask_api/
+archive/ml_python_legacy/
+
+# Disallow node modules and large binaries everywhere
+**/node_modules/
+**/node.exe
+**/*.mp4
+**/*.pyc
