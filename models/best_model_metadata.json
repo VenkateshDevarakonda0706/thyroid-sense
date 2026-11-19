@@ -1,0 +1,26 @@
+{
+  "best_model_name": "Random Forest",
+  "macro_f1": 0.9856518978387351,
+  "class_mapping": {
+    "1": "Compensated Hypothyroid",
+    "7": "Negative (Healthy)",
+    "9": "Primary Hypothyroid",
+    "11": "Secondary Hypothyroid"
+  },
+  "feature_names": [
+    "age",
+    "sex",
+    "on thyroxine",
+    "on antithyroid medication",
+    "pregnant",
+    "thyroid surgery",
+    "lithium",
+    "goitre",
+    "tumor",
+    "TSH",
+    "T3",
+    "TT4",
+    "T4U",
+    "FTI"
+  ]
+}
