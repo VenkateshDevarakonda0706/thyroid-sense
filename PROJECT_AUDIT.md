@@ -128,10 +128,10 @@ The workspace contained over 20 CSV files with varying shapes and column counts.
 ## 5. Security & Credentials Findings
 
 > [!WARNING]
-> **Hardcoded Secret Found in `project2/Project/Server/index.js` (Line 19):**  
+> **Hardcoded Secret Found in Legacy `project2/Project/Server/index.js` (Line 19):**  
 > `[REDACTED]`  
 > - **Risk:** Exposes database credentials to anyone viewing the repository.  
-> - **Action Required:** Remove connection strings from source code, replace with `.env.example` templates, and ensure the live credentials are never committed to GitHub.
+> - **Action Required:** Remove connection strings from source code, replace with `.env.example` templates, and ensure live credentials are never committed to GitHub. Rotated password advisory issued to project team.
 
 ---
 
