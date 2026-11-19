@@ -12,8 +12,10 @@ env/
 ENV/
 .env.local
 
-# Jupyter Notebook checkpoints
+# Jupyter Notebook checkpoints & local execution outputs
 .ipynb_checkpoints/
+notebooks/models/
+notebooks/results/
 
 # Local cache & plotting state
 .matplotlib/
