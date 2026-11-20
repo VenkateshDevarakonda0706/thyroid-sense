@@ -1,9 +1,16 @@
 {
-  "best_model_name": "Random Forest",
-  "macro_f1": 0.9856518978387351,
+  "best_model_name": "Decision Tree",
+  "macro_f1": 0.7436246612466124,
+  "pipeline_type": "authentic_uci_allhypo",
+  "model_selection_note": "Selected as the highest-scoring model (Macro F1 = 0.7436) in the comparison across 6 candidate classifiers on the authentic UCI test partition. Because model selection was performed on the test partition, this score represents the top comparative benchmark performance on this historical test partition rather than an independent post-selection holdout estimate.",
+  "evaluation_note": "Evaluated strictly on untouched out-of-sample test partition (972 original test records).",
+  "test_support_note": "Original test partition contains 0 Secondary Hypothyroid cases (support=0); Secondary detection performance could not be evaluated on the holdout test set.",
+  "clinical_interpretation_note": "The Decision Tree relied heavily on TSH, TT4, and FTI in its predictions. These features are relevant thyroid laboratory measurements, although the learned model thresholds have not been clinically validated.",
+  "secondary_hypothyroid_disclosure": "Only two Secondary Hypothyroid records exist in the entire dataset, and both belong to the training partition (allhypo.data). The test partition contains zero examples of this class. Oversampling duplicates these examples in training; it does not create new independent clinical observations.",
+  "dataset_scope_note": "Historical 1987 UCI benchmark; educational/research use only, not intended for clinical diagnosis.",
   "class_mapping": {
     "1": "Compensated Hypothyroid",
-    "7": "Negative (Healthy)",
+    "7": "Negative",
     "9": "Primary Hypothyroid",
     "11": "Secondary Hypothyroid"
   },
@@ -22,5 +29,21 @@
     "TT4",
     "T4U",
     "FTI"
-  ]
+  ],
+  "imputation_values": {
+    "age": 54.0,
+    "TSH": 1.4,
+    "T3": 2.0,
+    "TT4": 104.0,
+    "T4U": 0.98,
+    "FTI": 107.0,
+    "sex": 0.0,
+    "on thyroxine": 0.0,
+    "on antithyroid medication": 0.0,
+    "pregnant": 0.0,
+    "thyroid surgery": 0.0,
+    "lithium": 0.0,
+    "goitre": 0.0,
+    "tumor": 0.0
+  }
 }

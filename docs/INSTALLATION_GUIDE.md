@@ -21,8 +21,8 @@
 ### Step 1: Clone or Navigate to the Repository
 Open PowerShell or your preferred terminal:
 ```bash
-git clone https://github.com/VenkateshDevarakonda0706/ThyroidSense.git
-cd ThyroidSense
+git clone https://github.com/VenkateshDevarakonda0706/thyroid-sense.git
+cd thyroid-sense
 ```
 
 ### Step 2: Create an Isolated Virtual Environment
@@ -70,7 +70,7 @@ pytest -v tests
 ```
 *Expected Output:*
 ```
-============================== 9 passed in 3.93s ==============================
+============================== 18 passed in 5.10s ==============================
 ```
 
 ---

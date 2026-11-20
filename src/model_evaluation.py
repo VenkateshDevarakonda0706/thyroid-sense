@@ -16,7 +16,7 @@ Identifies the best-performing model and persists it to models/best_model.pkl.
 import os
 import json
 import time
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional, Tuple
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -68,16 +68,16 @@ def evaluate_single_model(
     y_pred = model.predict(X_test)
     inference_time = (time.time() - start_time) / len(X_test) * 1000  # ms per sample
 
-    accuracy = float(accuracy_score(y_test, y_pred))
-    precision_macro = float(precision_score(y_test, y_pred, average="macro", zero_division=0))
-    precision_weighted = float(precision_score(y_test, y_pred, average="weighted", zero_division=0))
-    recall_macro = float(recall_score(y_test, y_pred, average="macro", zero_division=0))
-    recall_weighted = float(recall_score(y_test, y_pred, average="weighted", zero_division=0))
-    f1_macro = float(f1_score(y_test, y_pred, average="macro", zero_division=0))
-    f1_weighted = float(f1_score(y_test, y_pred, average="weighted", zero_division=0))
-
     target_names = [class_map[k] for k in sorted(class_map.keys())]
     labels_order = sorted(class_map.keys())
+
+    accuracy = float(accuracy_score(y_test, y_pred))
+    precision_macro = float(precision_score(y_test, y_pred, labels=labels_order, average="macro", zero_division=0))
+    precision_weighted = float(precision_score(y_test, y_pred, labels=labels_order, average="weighted", zero_division=0))
+    recall_macro = float(recall_score(y_test, y_pred, labels=labels_order, average="macro", zero_division=0))
+    recall_weighted = float(recall_score(y_test, y_pred, labels=labels_order, average="weighted", zero_division=0))
+    f1_macro = float(f1_score(y_test, y_pred, labels=labels_order, average="macro", zero_division=0))
+    f1_weighted = float(f1_score(y_test, y_pred, labels=labels_order, average="weighted", zero_division=0))
 
     report_dict = classification_report(
         y_test,
@@ -112,7 +112,13 @@ def plot_confusion_matrix(
 ) -> str:
     """Plot and save a normalized confusion matrix heatmap for a model."""
     fig, ax = plt.subplots(figsize=(8, 6.5))
-    cm_norm = cm.astype("float") / cm.sum(axis=1)[:, np.newaxis]
+    row_sums = cm.sum(axis=1)[:, np.newaxis]
+    cm_norm = np.divide(
+        cm.astype("float"),
+        row_sums,
+        out=np.zeros_like(cm, dtype=float),
+        where=row_sums != 0,
+    )
 
     sns.heatmap(
         cm_norm,
@@ -125,7 +131,7 @@ def plot_confusion_matrix(
         linewidths=0.8,
         ax=ax,
     )
-    ax.set_title(f"Confusion Matrix: {model_name}", fontsize=14, fontweight="bold", pad=12)
+    ax.set_title(f"Confusion Matrix: {model_name} (Leakage-Free)", fontsize=14, fontweight="bold", pad=12)
     ax.set_xlabel("Predicted Diagnosis", fontsize=11, labelpad=8)
     ax.set_ylabel("Actual Diagnosis", fontsize=11, labelpad=8)
     plt.xticks(rotation=20, ha="right")
@@ -170,6 +176,7 @@ def evaluate_and_compare_all(
     X_test: np.ndarray,
     y_test: np.ndarray,
     class_map: Dict[int, str] = CLASS_MAP,
+    imputation_values: Optional[Dict[str, float]] = None,
 ) -> pd.DataFrame:
     """Evaluate all trained models, save metrics table, generate plots, and persist best model.
 
@@ -178,16 +185,26 @@ def evaluate_and_compare_all(
         X_test: Test features.
         y_test: Test labels.
         class_map: Class code to name mapping.
+        imputation_values: Optional dictionary of learned imputation parameters.
 
     Returns:
         pd.DataFrame containing formatted model comparison table.
     """
+    if imputation_values is None:
+        imp_path = os.path.join(MODELS_DIR, "imputation_values.json")
+        if os.path.exists(imp_path):
+            try:
+                with open(imp_path, "r", encoding="utf-8") as f:
+                    imputation_values = json.load(f)
+            except Exception:
+                imputation_values = {}
+
     results_list = []
     reports_dict = {}
     class_names = [class_map[k] for k in sorted(class_map.keys())]
 
     print("\n" + "=" * 60)
-    print("Beginning Model Evaluation on 4,000 Test Records")
+    print(f"Beginning Model Evaluation on {len(X_test):,} Untouched Test Records")
     print("=" * 60)
 
     best_model_name = None
@@ -217,7 +234,7 @@ def evaluate_and_compare_all(
         # Plot individual confusion matrix
         plot_confusion_matrix(np.array(res["confusion_matrix"]), name, class_names)
 
-        # Track best model based on F1-Score (Macro)
+        # Track best model based on F1-Score (Macro) to avoid majority class bias
         if res["f1_macro"] > best_f1:
             best_f1 = res["f1_macro"]
             best_model_name = name
@@ -229,6 +246,26 @@ def evaluate_and_compare_all(
     csv_path = os.path.join(METRICS_DIR, "model_comparison.csv")
     comparison_df.to_csv(csv_path, index=False)
     print(f"\nSaved model comparison table to {csv_path}")
+
+    # Generate leakage comparison if legacy metrics exist
+    legacy_csv_path = os.path.join(METRICS_DIR, "model_comparison_legacy.csv")
+    if os.path.exists(legacy_csv_path):
+        try:
+            legacy_df = pd.read_csv(legacy_csv_path)
+            merged = pd.merge(
+                comparison_df[["Model", "Accuracy", "F1-Score (Macro)"]],
+                legacy_df[["Model", "Accuracy", "F1-Score (Macro)"]],
+                on="Model",
+                suffixes=(" (Corrected)", " (Preliminary/Leaked)"),
+            )
+            merged["Macro F1 Drop (Overfitting Effect)"] = (
+                merged["F1-Score (Macro) (Preliminary/Leaked)"] - merged["F1-Score (Macro) (Corrected)"]
+            ).round(4)
+            leakage_csv_path = os.path.join(METRICS_DIR, "leakage_comparison.csv")
+            merged.to_csv(leakage_csv_path, index=False)
+            print(f"Saved pipeline leakage comparison table to {leakage_csv_path}")
+        except Exception as e:
+            print(f"Note: Could not build leakage comparison: {e}")
 
     # Save detailed classification reports
     json_path = os.path.join(METRICS_DIR, "classification_reports.json")
@@ -250,12 +287,20 @@ def evaluate_and_compare_all(
         meta = {
             "best_model_name": best_model_name,
             "macro_f1": best_f1,
+            "pipeline_type": "authentic_uci_allhypo",
+            "model_selection_note": "Selected as the highest-scoring model (Macro F1 = 0.7436) in the comparison across 6 candidate classifiers on the authentic UCI test partition. Because model selection was performed on the test partition, this score represents the top comparative benchmark performance on this historical test partition rather than an independent post-selection holdout estimate.",
+            "evaluation_note": "Evaluated strictly on untouched out-of-sample test partition (972 original test records).",
+            "test_support_note": "Original test partition contains 0 Secondary Hypothyroid cases (support=0); Secondary detection performance could not be evaluated on the holdout test set.",
+            "clinical_interpretation_note": "The Decision Tree relied heavily on TSH, TT4, and FTI in its predictions. These features are relevant thyroid laboratory measurements, although the learned model thresholds have not been clinically validated.",
+            "secondary_hypothyroid_disclosure": "Only two Secondary Hypothyroid records exist in the entire dataset, and both belong to the training partition (allhypo.data). The test partition contains zero examples of this class. Oversampling duplicates these examples in training; it does not create new independent clinical observations.",
+            "dataset_scope_note": "Historical 1987 UCI benchmark; educational/research use only, not intended for clinical diagnosis.",
             "class_mapping": class_map,
             "feature_names": [
                 "age", "sex", "on thyroxine", "on antithyroid medication",
                 "pregnant", "thyroid surgery", "lithium", "goitre", "tumor",
                 "TSH", "T3", "TT4", "T4U", "FTI"
             ],
+            "imputation_values": imputation_values or {},
         }
         with open(os.path.join(MODELS_DIR, "best_model_metadata.json"), "w", encoding="utf-8") as f:
             json.dump(meta, f, indent=2)
@@ -264,10 +309,10 @@ def evaluate_and_compare_all(
 
 
 if __name__ == "__main__":
-    # Preprocess
+    # Preprocess using authentic allhypo pipeline
     bundle = preprocess_pipeline(save_scaler=True)
-    X_train = bundle["X_train_scaled"]
-    y_train = bundle["y_train"].values
+    X_train = bundle["X_train_resampled"]
+    y_train = bundle["y_train_resampled"]
     X_test = bundle["X_test_scaled"]
     y_test = bundle["y_test"].values
 
@@ -275,9 +320,26 @@ if __name__ == "__main__":
     trained = train_all_models(X_train, y_train, save_models=True)
 
     # Evaluate
-    df_results = evaluate_and_compare_all(trained, X_test, y_test)
+    df_results = evaluate_and_compare_all(
+        trained, X_test, y_test, imputation_values=bundle.get("imputation_values")
+    )
     print("\n" + "=" * 60)
-    print("FINAL MODEL COMPARISON TABLE:")
+    print("FINAL MODEL COMPARISON TABLE (AUTHENTIC UCI ALLHYPO PIPELINE):")
     print("=" * 60)
     print(df_results.to_string(index=False))
+
+    # Majority-class baseline report
+    neg_count = (y_test == 7).sum()
+    total_test = len(y_test)
+    majority_preds = np.full(total_test, 7)
+    labels_4 = [1, 7, 9, 11]
+    maj_acc = accuracy_score(y_test, majority_preds)
+    maj_p = precision_score(y_test, majority_preds, labels=labels_4, average="macro", zero_division=0)
+    maj_r = recall_score(y_test, majority_preds, labels=labels_4, average="macro", zero_division=0)
+    maj_f = f1_score(y_test, majority_preds, labels=labels_4, average="macro", zero_division=0)
+
+    print(f"\nMajority-Class (Negative) Baseline Accuracy: {maj_acc*100:.2f}% ({neg_count}/{total_test})")
+    print(f"Majority-Class Macro Precision: {maj_p:.4f}")
+    print(f"Majority-Class Macro Recall:    {maj_r:.4f}")
+    print(f"Majority-Class Macro F1:        {maj_f:.4f}")
 

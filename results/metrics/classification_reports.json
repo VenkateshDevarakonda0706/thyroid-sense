@@ -1,236 +1,236 @@
 {
   "Logistic Regression": {
     "Compensated Hypothyroid": {
-      "precision": 0.8056968463886063,
-      "recall": 0.792,
-      "f1-score": 0.7987897125567323,
-      "support": 1000.0
+      "precision": 0.6666666666666666,
+      "recall": 0.95,
+      "f1-score": 0.7835051546391752,
+      "support": 40.0
     },
-    "Negative (Healthy)": {
-      "precision": 0.8007968127490039,
-      "recall": 0.804,
-      "f1-score": 0.8023952095808383,
-      "support": 1000.0
+    "Negative": {
+      "precision": 1.0,
+      "recall": 0.9600443951165372,
+      "f1-score": 0.9796149490373726,
+      "support": 901.0
     },
     "Primary Hypothyroid": {
-      "precision": 0.9668737060041408,
-      "recall": 0.934,
-      "f1-score": 0.9501525940996948,
-      "support": 1000.0
+      "precision": 0.8055555555555556,
+      "recall": 0.9354838709677419,
+      "f1-score": 0.8656716417910447,
+      "support": 31.0
     },
     "Secondary Hypothyroid": {
-      "precision": 0.9551098376313276,
-      "recall": 1.0,
-      "f1-score": 0.9770395701025891,
-      "support": 1000.0
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 0.0
     },
-    "accuracy": 0.8825,
+    "accuracy": 0.9588477366255144,
     "macro avg": {
-      "precision": 0.8821193006932696,
-      "recall": 0.8825000000000001,
-      "f1-score": 0.8820942715849637,
-      "support": 4000.0
+      "precision": 0.6180555555555556,
+      "recall": 0.7113820665210697,
+      "f1-score": 0.6571979363668982,
+      "support": 972.0
     },
     "weighted avg": {
-      "precision": 0.8821193006932697,
-      "recall": 0.8825,
-      "f1-score": 0.8820942715849637,
-      "support": 4000.0
+      "precision": 0.9800811614083218,
+      "recall": 0.9588477366255144,
+      "f1-score": 0.9679105927610722,
+      "support": 972.0
     }
   },
   "Decision Tree": {
     "Compensated Hypothyroid": {
-      "precision": 0.9629268292682926,
-      "recall": 0.987,
-      "f1-score": 0.9748148148148148,
-      "support": 1000.0
+      "precision": 0.9523809523809523,
+      "recall": 1.0,
+      "f1-score": 0.975609756097561,
+      "support": 40.0
     },
-    "Negative (Healthy)": {
+    "Negative": {
       "precision": 1.0,
-      "recall": 0.942,
-      "f1-score": 0.9701338825952626,
-      "support": 1000.0
+      "recall": 0.9977802441731409,
+      "f1-score": 0.9988888888888889,
+      "support": 901.0
     },
     "Primary Hypothyroid": {
-      "precision": 0.968054211035818,
-      "recall": 1.0,
-      "f1-score": 0.9837678307919331,
-      "support": 1000.0
-    },
-    "Secondary Hypothyroid": {
       "precision": 1.0,
       "recall": 1.0,
       "f1-score": 1.0,
-      "support": 1000.0
+      "support": 31.0
     },
-    "accuracy": 0.98225,
+    "Secondary Hypothyroid": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 0.0
+    },
+    "accuracy": 0.9979423868312757,
     "macro avg": {
-      "precision": 0.9827452600760277,
-      "recall": 0.98225,
-      "f1-score": 0.9821791320505027,
-      "support": 4000.0
+      "precision": 0.7380952380952381,
+      "recall": 0.7494450610432852,
+      "f1-score": 0.7436246612466124,
+      "support": 972.0
     },
     "weighted avg": {
-      "precision": 0.9827452600760277,
-      "recall": 0.98225,
-      "f1-score": 0.9821791320505027,
-      "support": 4000.0
+      "precision": 0.9980403684107387,
+      "recall": 0.9979423868312757,
+      "f1-score": 0.9979663365563697,
+      "support": 972.0
     }
   },
   "Random Forest": {
     "Compensated Hypothyroid": {
-      "precision": 0.9633911368015414,
-      "recall": 1.0,
-      "f1-score": 0.9813542688910697,
-      "support": 1000.0
+      "precision": 0.9285714285714286,
+      "recall": 0.975,
+      "f1-score": 0.9512195121951219,
+      "support": 40.0
     },
-    "Negative (Healthy)": {
+    "Negative": {
       "precision": 1.0,
-      "recall": 0.943,
-      "f1-score": 0.970663921770458,
-      "support": 1000.0
+      "recall": 0.9966703662597114,
+      "f1-score": 0.9983324068927182,
+      "support": 901.0
     },
     "Primary Hypothyroid": {
-      "precision": 0.9813542688910697,
+      "precision": 0.96875,
       "recall": 1.0,
-      "f1-score": 0.9905894006934126,
-      "support": 1000.0
+      "f1-score": 0.9841269841269841,
+      "support": 31.0
     },
     "Secondary Hypothyroid": {
-      "precision": 1.0,
-      "recall": 1.0,
-      "f1-score": 1.0,
-      "support": 1000.0
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 0.0
     },
-    "accuracy": 0.98575,
+    "accuracy": 0.9958847736625515,
     "macro avg": {
-      "precision": 0.9861863514231528,
-      "recall": 0.98575,
-      "f1-score": 0.9856518978387351,
-      "support": 4000.0
+      "precision": 0.7243303571428572,
+      "recall": 0.7429175915649279,
+      "f1-score": 0.7334197258037061,
+      "support": 972.0
     },
     "weighted avg": {
-      "precision": 0.9861863514231528,
-      "recall": 0.98575,
-      "f1-score": 0.9856518978387351,
-      "support": 4000.0
+      "precision": 0.9960638962375074,
+      "recall": 0.9958847736625515,
+      "f1-score": 0.9959405510350622,
+      "support": 972.0
     }
   },
   "K-Nearest Neighbors": {
     "Compensated Hypothyroid": {
-      "precision": 0.9309701492537313,
-      "recall": 0.998,
-      "f1-score": 0.9633204633204633,
-      "support": 1000.0
+      "precision": 0.43636363636363634,
+      "recall": 0.6,
+      "f1-score": 0.5052631578947369,
+      "support": 40.0
     },
-    "Negative (Healthy)": {
-      "precision": 0.9977924944812362,
-      "recall": 0.904,
-      "f1-score": 0.9485834207764953,
-      "support": 1000.0
+    "Negative": {
+      "precision": 0.9819616685456595,
+      "recall": 0.9667036625971143,
+      "f1-score": 0.9742729306487695,
+      "support": 901.0
     },
     "Primary Hypothyroid": {
-      "precision": 0.9784735812133072,
-      "recall": 1.0,
-      "f1-score": 0.9891196834817013,
-      "support": 1000.0
+      "precision": 0.8571428571428571,
+      "recall": 0.7741935483870968,
+      "f1-score": 0.8135593220338984,
+      "support": 31.0
     },
     "Secondary Hypothyroid": {
-      "precision": 1.0,
-      "recall": 1.0,
-      "f1-score": 1.0,
-      "support": 1000.0
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 0.0
     },
-    "accuracy": 0.9755,
+    "accuracy": 0.9454732510288066,
     "macro avg": {
-      "precision": 0.9768090562370686,
-      "recall": 0.9755,
-      "f1-score": 0.975255891894665,
-      "support": 4000.0
+      "precision": 0.5688670405130383,
+      "recall": 0.5852243027460527,
+      "f1-score": 0.5732738526443512,
+      "support": 972.0
     },
     "weighted avg": {
-      "precision": 0.9768090562370687,
-      "recall": 0.9755,
-      "f1-score": 0.975255891894665,
-      "support": 4000.0
+      "precision": 0.9555282277629765,
+      "recall": 0.9454732510288066,
+      "f1-score": 0.949846477174261,
+      "support": 972.0
     }
   },
   "Support Vector Machine": {
     "Compensated Hypothyroid": {
-      "precision": 0.8742911153119093,
+      "precision": 0.5522388059701493,
       "recall": 0.925,
-      "f1-score": 0.8989310009718173,
-      "support": 1000.0
+      "f1-score": 0.6915887850467289,
+      "support": 40.0
     },
-    "Negative (Healthy)": {
-      "precision": 0.9211927582534611,
-      "recall": 0.865,
-      "f1-score": 0.8922124806601341,
-      "support": 1000.0
+    "Negative": {
+      "precision": 1.0,
+      "recall": 0.9556048834628191,
+      "f1-score": 0.9772985244040863,
+      "support": 901.0
     },
     "Primary Hypothyroid": {
-      "precision": 0.9750499001996008,
-      "recall": 0.977,
-      "f1-score": 0.9760239760239761,
-      "support": 1000.0
+      "precision": 0.7073170731707317,
+      "recall": 0.9354838709677419,
+      "f1-score": 0.8055555555555556,
+      "support": 31.0
     },
     "Secondary Hypothyroid": {
-      "precision": 0.999000999000999,
-      "recall": 1.0,
-      "f1-score": 0.9995002498750625,
-      "support": 1000.0
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 0.0
     },
-    "accuracy": 0.94175,
+    "accuracy": 0.9537037037037037,
     "macro avg": {
-      "precision": 0.9423836931914925,
-      "recall": 0.94175,
-      "f1-score": 0.9416669268827476,
-      "support": 4000.0
+      "precision": 0.5648889697852202,
+      "recall": 0.7040221886076403,
+      "f1-score": 0.6186107162515927,
+      "support": 972.0
     },
     "weighted avg": {
-      "precision": 0.9423836931914925,
-      "recall": 0.94175,
-      "f1-score": 0.9416669268827474,
-      "support": 4000.0
+      "precision": 0.972239075624587,
+      "recall": 0.9537037037037037,
+      "f1-score": 0.9600635227491493,
+      "support": 972.0
     }
   },
   "Gaussian Naive Bayes": {
     "Compensated Hypothyroid": {
-      "precision": 0.5485164394546913,
-      "recall": 0.684,
-      "f1-score": 0.6088117489986649,
-      "support": 1000.0
+      "precision": 0.05510204081632653,
+      "recall": 0.675,
+      "f1-score": 0.1018867924528302,
+      "support": 40.0
     },
-    "Negative (Healthy)": {
+    "Negative": {
       "precision": 1.0,
-      "recall": 0.038,
-      "f1-score": 0.07321772639691715,
-      "support": 1000.0
+      "recall": 0.038845726970033294,
+      "f1-score": 0.07478632478632478,
+      "support": 901.0
     },
     "Primary Hypothyroid": {
-      "precision": 0.845708775313404,
-      "recall": 0.877,
-      "f1-score": 0.8610702012763869,
-      "support": 1000.0
+      "precision": 0.1696969696969697,
+      "recall": 0.9032258064516129,
+      "f1-score": 0.2857142857142857,
+      "support": 31.0
     },
     "Secondary Hypothyroid": {
-      "precision": 0.5959475566150179,
-      "recall": 1.0,
-      "f1-score": 0.7468259895444361,
-      "support": 1000.0
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 0.0
     },
-    "accuracy": 0.64975,
+    "accuracy": 0.09259259259259259,
     "macro avg": {
-      "precision": 0.7475431928457783,
-      "recall": 0.64975,
-      "f1-score": 0.5724814165541012,
-      "support": 4000.0
+      "precision": 0.30619975262832405,
+      "recall": 0.40426788335541153,
+      "f1-score": 0.11559685073836017,
+      "support": 972.0
     },
     "weighted avg": {
-      "precision": 0.7475431928457783,
-      "recall": 0.64975,
-      "f1-score": 0.5724814165541012,
-      "support": 4000.0
+      "precision": 0.9346344523593201,
+      "recall": 0.09259259259259259,
+      "f1-score": 0.08262869669520032,
+      "support": 972.0
     }
   }
 }

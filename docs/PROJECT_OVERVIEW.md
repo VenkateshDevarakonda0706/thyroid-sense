@@ -2,25 +2,32 @@
 
 **Project Title:** ThyroidSense: Thyroid Disease Detection Using Machine Learning  
 **Project Identifier:** `ThyroidSense`  
-**GitHub Repository:** [https://github.com/VenkateshDevarakonda0706/ThyroidSense](https://github.com/VenkateshDevarakonda0706/ThyroidSense)  
+**GitHub Repository:** [https://github.com/VenkateshDevarakonda0706/thyroid-sense](https://github.com/VenkateshDevarakonda0706/thyroid-sense)  
 **Author:** Venkatesh Devarakonda  
 **Degree / Curriculum:** B.Tech Computer Science & Engineering (AI & ML) — Semester 2-1  
-**Project Category:** Supervised Machine Learning & Clinical Decision Support  
-**Status:** Complete, Reconstructed, Benchmarked, and Verified  
+**Project Category:** Supervised Machine Learning & Academic Benchmark  
+**Status:** Complete, Reconstructed, Benchmarked, and Leakage-Safe  
 
 ---
 
 ## 1. Executive Summary
 
-**ThyroidSense** is an academic Machine Learning project that develops an end-to-end classification system for thyroid disease detection. Thyroid disorders affect hundreds of millions of individuals globally. Because symptoms like fatigue, weight fluctuations, mood changes, and temperature sensitivity overlap with numerous common ailments, clinical diagnosis heavily relies on comprehensive serum blood tests measuring thyroid hormones.
+**ThyroidSense** is an academic Machine Learning project that develops an end-to-end classification system for thyroid disease detection. Thyroid disorders affect hundreds of millions of individuals globally. Because symptoms like fatigue, weight fluctuations, mood changes, and cold/heat intolerance overlap with numerous common conditions, clinical diagnosis heavily relies on serum blood tests measuring thyroid hormones.
 
 This project delivers an end-to-end Machine Learning pipeline that analyzes patient clinical attributes, demographic factors, and endocrine laboratory measurements to classify patients into four distinct thyroid diagnostic states:
-1. **Compensated Hypothyroid:** Early/subclinical stage of thyroid underactivity.
-2. **Negative (Normal):** Healthy, balanced euthyroid function.
-3. **Primary Hypothyroid:** Overt thyroid failure requiring hormone replacement.
-4. **Secondary Hypothyroid:** Central underactivity caused by pituitary gland dysfunction.
+1. **Compensated Hypothyroid (Class 1):** Early/subclinical stage of thyroid underactivity (elevated TSH with normal free thyroid hormone).
+2. **Negative (Normal) (Class 7):** Healthy, balanced euthyroid endocrine function.
+3. **Primary Hypothyroid (Class 9):** Overt thyroid gland failure (severely elevated TSH with low TT4/FTI).
+4. **Secondary Hypothyroid (Class 11):** Central underactivity caused by pituitary failure (rare, low or normal TSH with low thyroid hormone).
 
-By systematically applying data cleaning, median-based missing value imputation, random oversampling, stratified train-test splitting, feature standardization, and comparative model benchmarking across six classical machine learning algorithms, the final **Random Forest Classifier** achieved an outstanding test accuracy of **98.58%** and a Macro F1-score of **0.9857**.
+By systematically migrating from an incorrectly merged 6-subtask historical dataset to the authentic, single-task UCI **`allhypo`** benchmark (3,772 total patients: 2,800 train in `allhypo.data` and 972 test in `allhypo.test`), implementing training-only median imputation, fitting feature standardization **before** oversampling, and balancing only training data with `RandomOverSampler`, the project establishes a rigorous, leak-free machine learning benchmark.
+
+In our authentic evaluation on the 972 untouched test patients, the **Decision Tree Classifier** achieved top performance:
+- **Test Accuracy:** **99.79%** (970/972 correct)
+- **Macro F1-Score:** **0.7436** (capped by zero support for Secondary Hypothyroid in the test partition)
+- **Compensated Hypothyroid Recall:** **100.00%** (40/40 detected, F1: 0.9756)
+- **Primary Hypothyroid Recall:** **100.00%** (31/31 detected, F1: 1.0000)
+- **Negative Class Recall:** **99.78%** (899/901 healthy correctly classified, Precision: 100.00%)
 
 ---
 
@@ -35,17 +42,17 @@ Accurately interpreting thyroid panels can be complex when patients exhibit subt
 
 ## 3. Project Objectives
 
-1. **Demonstrate Complete ML Lifecycle:** Follow a rigorous, disciplined engineering pipeline from raw data exploration to final model inference and verification.
-2. **Rigorous Data Hygiene:** Prevent data leakage by ensuring that all scalers and imputation medians are computed strictly on the training partition.
+1. **Demonstrate Complete ML Lifecycle:** Follow a rigorous engineering pipeline from raw data parsing to final model inference and verification.
+2. **Rigorous Data Hygiene:** Prevent data leakage by ensuring that all scalers and imputation medians are computed strictly on the training partition (`allhypo.data`).
 3. **Benchmark Multiple Algorithms:** Implement, tune, and compare six traditional supervised learning models:
-   - Logistic Regression
-   - Decision Tree Classifier
+   - Decision Tree Classifier (Top Performer)
    - Random Forest Classifier
-   - K-Nearest Neighbors (KNN, $k=3$)
+   - Logistic Regression
    - Support Vector Classifier (SVC, RBF Kernel)
+   - K-Nearest Neighbors (KNN, $k=3$)
    - Gaussian Naive Bayes
 4. **Comprehensive Evaluation:** Assess models using multi-metric evaluation (Accuracy, Precision, Recall, F1-Score, Confusion Matrices, and Inference Latency).
-5. **Educational Excellence:** Create clean, modular Python modules, self-contained executable Jupyter notebooks, unit tests, and thorough academic documentation suitable for an undergraduate engineering viva and technical job interviews.
+5. **Educational Excellence:** Create clean, modular Python modules, self-contained executable Jupyter notebooks, unit tests (16 tests, 100% pass rate), and thorough academic documentation suitable for an undergraduate engineering viva and technical interviews.
 
 ---
 
@@ -69,33 +76,41 @@ Accurately interpreting thyroid panels can be complex when patients exhibit subt
 ## 5. Architectural Pipeline
 
 ```
-[Raw UCI Dataset] ──> [Data Cleaning & Imputation] ──> [Class Balancing]
-                                                               │
-                                                               ▼
-[StandardScaler] <── [Stratified 80/20 Train/Test Split]
-       │                                                       │
-       ▼                                                       ▼
-[Standardized Train Matrix]                        [Standardized Test Matrix]
-       │                                                       │
-       ▼                                                       ▼
-[6 Model Algorithms] ────────> [Training] ────────> [Holdout Evaluation (4,000)]
-                                                               │
-                                                               ▼
-                                                  [Metrics & Comparison Table]
-                                                  - Random Forest: 98.58%
-                                                  - Decision Tree: 98.22%
-                                                  - KNN (k=3): 97.55%
-                                                  - SVM (RBF): 94.17%
-                                                  - Logistic Reg: 88.25%
-                                                  - Naive Bayes: 64.98%
+[Authentic UCI allhypo Dataset]
+   ├── allhypo.data (2,800 train records)
+   └── allhypo.test (972 test records)
+            │
+            ▼
+[Parsing & Administrative ID Exclusion] (Exclude Garavan patient IDs from features)
+            │
+            ▼
+[Training-Only Median Imputation] (Computed strictly on X_train: age=54, TSH=1.4, etc.)
+            │
+            ▼
+[StandardScaler Fit on Train] (Fitted BEFORE oversampling to preserve natural variance)
+            │
+            ▼
+[RandomOverSampler on Train Only] (Resampled to 2,580/class = 10,320 rows)
+            │
+            ├── Train 6 Estimators on X_train_resampled (10,320 rows)
+            └── Evaluate on UNTOUCHED Test Partition (972 rows)
+                     │
+                     ▼
+             [Benchmark Results]
+             - Decision Tree: 99.79% Acc | 0.7436 Macro F1 (Rank 1)
+             - Random Forest: 99.59% Acc | 0.7334 Macro F1 (Rank 2)
+             - Logistic Reg:  95.88% Acc | 0.6572 Macro F1 (Rank 3)
+             - SVM (RBF):     95.37% Acc | 0.6186 Macro F1 (Rank 4)
+             - KNN (k=3):     94.55% Acc | 0.5733 Macro F1 (Rank 5)
+             - Naive Bayes:    9.26% Acc | 0.1156 Macro F1 (Rank 6)
 ```
 
 ---
 
 ## 6. Summary of Key Achievements
 
-- **Zero Data Leakage:** Preprocessing transformations fit exclusively on the training split.
-- **Reproducible Science:** Controlled random states guarantee identical metric reproduction across platforms.
-- **Full Test Coverage:** Automated unit test suite (`pytest`) verifies preprocessing logic, split proportions, scaler leak prevention, and model inference.
-- **Academic Preservation:** Preserves and validates the student's original semester 2-1 findings while upgrading the codebase to production standards.
-
+- **Zero Data Leakage:** Preprocessing transformations fit exclusively on the training split (`allhypo.data`), and standardization precedes oversampling.
+- **Authentic Benchmark Integrity:** Relies on the canonical 1987 UCI `allhypo` dataset with zero multi-task label contradictions.
+- **Reproducible Science:** Fixed random states guarantee identical metric reproduction across runs.
+- **Comprehensive Test Coverage:** Automated unit test suite (`pytest`) verifies 16 tests covering parsing, split disjointness, scaler leak prevention, zero test support handling, and inference.
+- **Academic Rigor:** Fully transparent regarding dataset scarcity (Secondary Hypothyroid support = 0 in test partition) and baseline comparisons (92.70% majority-class baseline).

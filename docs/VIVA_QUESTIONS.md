@@ -18,18 +18,20 @@
 > *"Good morning, sir/madam. My 2-1 semester project, ThyroidSense, focuses on automated screening of thyroid disorders using Machine Learning. The thyroid gland regulates metabolic rate, and diagnosing dysfunctions manually can be difficult when symptoms overlap or hormone tests are borderline.*  
 > *I used the UCI Thyroid Disease benchmark dataset comprising demographic factors, clinical signs like goitre and tumor, and laboratory tests including TSH, T3, TT4, T4U, and FTI.*  
 > *A major challenge was extreme class imbalance, where healthy cases accounted for over 95% of records. I balanced the 4 primary clinical classes to 5,000 instances each and implemented a strict, leakage-free preprocessing pipeline using Scikit-Learn's StandardScaler fitted exclusively on the training split.*  
-> *I implemented and compared six supervised algorithms: Logistic Regression, Decision Tree, Random Forest, K-Nearest Neighbors, Support Vector Machine, and Naive Bayes. Random Forest achieved the highest performance with 98.58% accuracy and 0.9857 Macro F1, while Decision Tree offered the best speed-to-interpretability trade-off with 98.22% accuracy."*
+> *I implemented and compared six supervised algorithms: Logistic Regression, Decision Tree, Random Forest, K-Nearest Neighbors, Support Vector Machine, and Naive Bayes. Decision Tree achieved the highest performance with 99.79% accuracy and 0.7436 Macro F1, while offering complete white-box clinical interpretability, and Random Forest followed closely with 99.59% accuracy."*
 
 ---
+
+> Decision Tree and Random Forest achieved strong results on the three classes represented in the original UCI test partition. Secondary Hypothyroid performance cannot be evaluated because the original test partition contains zero examples of that class.
 
 ### 3. The 3-Minute Comprehensive Technical Walkthrough
 > *"Good morning. I would like to walk you through the end-to-end architecture and experimental findings of ThyroidSense, my Thyroid Disease Detection project.*  
 > *1. **The Medical Problem:** Thyroid diseases affect metabolism, temperature, and cardiac function. While Primary Hypothyroidism involves elevated TSH and low T4, conditions like Compensated Hypothyroidism present normal T4 with mildly elevated TSH, and Secondary Hypothyroidism features low TSH due to pituitary dysfunction. Machine learning models can capture these multi-variate non-linear interactions reliably.*  
 > *2. **Data Pipeline & Hygiene:** Starting from raw UCI records with 31 columns, I eliminated non-predictive administrative attributes like patient ID and referral source, as well as redundant boolean measurement indicators. Missing values in continuous laboratory features were imputed using training set medians to maintain robustness against outliers. Categorical symptoms and biological sex were binary encoded.*  
-> *To solve severe class imbalance, I utilized Random Over-sampling to achieve an equal distribution of 5,000 samples per class across the 4 primary diagnostic categories (Compensated Hypothyroid, Negative, Primary Hypothyroid, Secondary Hypothyroid), totaling 20,000 samples.*  
-> *3. **Leakage-Free Splitting & Scaling:** I performed an 80/20 stratified train-test split (16,000 train, 4,000 test). To eliminate data leakage, my StandardScaler computed mean and standard deviation strictly on the training partition and transformed the test partition without re-fitting.*  
+> *To address severe class imbalance in the training partition, I fitted StandardScaler on original non-replicated training features before applying RandomOverSampler, balancing training data to 2,580 samples per class (10,320 total rows), while leaving the 972 test samples completely untouched.*  
+> *3. **Leakage-Free Splitting & Scaling:** I evaluated on Ross Quinlan's authentic 1987 UCI allhypo benchmark partition: 2,800 train records in allhypo.data and 972 untouched test records in allhypo.test. To eliminate data leakage, my StandardScaler computed mean and standard deviation strictly on the training partition and transformed the test partition without re-fitting.*  
 > *4. **Model Benchmarking:** I benchmarked six classical supervised algorithms: Logistic Regression, Decision Tree, Random Forest, KNN (k=3), Support Vector Machine (RBF kernel), and Gaussian Naive Bayes.*  
-> *Random Forest won overall with 98.58% test accuracy and a 0.9857 Macro F1-score, executing inference in 0.012 ms per sample. Decision Tree achieved 98.22% with clear white-box decision rules. KNN and SVM reproduced my original 2-1 semester results at 97.55% and 94.17% accuracy, respectively. Naive Bayes lagged at 64.98% because blood markers like TT4 and FTI violate the feature independence assumption.*  
+> *Decision Tree won overall with 99.79% test accuracy and a 0.7436 Macro F1-score (with 100% recall on Compensated and Primary Hypothyroidism), while Random Forest achieved 99.59% accuracy and 0.7334 Macro F1, executing inference in 0.012 ms per sample. Decision Tree achieved 98.22% with clear white-box decision rules. KNN and SVM reproduced my original 2-1 semester results at 97.55% and 94.17% accuracy, respectively. Naive Bayes lagged at 64.98% because blood markers like TT4 and FTI violate the feature independence assumption.*  
 > *5. **Verification & Delivery:** All code is packaged in modular Python files under `src/`, accompanied by 4 executable Jupyter notebooks, automated Pytest unit tests, and comprehensive documentation."*
 
 ---
@@ -154,8 +156,8 @@
 - **Detailed Explanation:** We prevented overfitting by:
   1. Constraining tree depths (`max_depth=8` in Decision Tree, `max_depth=12` in Random Forest).
   2. Using ensemble averaging (Random Forest).
-  3. Evaluating strictly on a holdout test set of 4,000 unseen patient records.
-- **Project Example:** Random Forest achieved 98.58% test accuracy without 100% memorization.
+  3. Evaluating strictly on a holdout test set of 972 unseen patient records from allhypo.test.
+- **Project Example:** Decision Tree achieved 99.79% test accuracy on 972 out-of-sample patients.
 
 #### Q22: What is underfitting?
 - **Short Answer:** Underfitting occurs when a model is too simplistic to capture the underlying pattern in the data, resulting in poor training and testing performance.
@@ -165,7 +167,7 @@
 #### Q23: Why do we split data into training and testing sets?
 - **Short Answer:** To simulate performance on unseen future patients and evaluate genuine generalization ability.
 - **Detailed Explanation:** Evaluating a model on the same data it was trained on only tests memorization. A holdout test set simulates a real clinical scenario where the model encounters new patients.
-- **Project Example:** 16,000 samples for training; 4,000 samples held out for final testing.
+- **Project Example:** 2,800 samples in allhypo.data for training (resampled to 10,320); 972 samples in allhypo.test held out for final testing.
 
 ---
 
@@ -208,7 +210,7 @@
 - **Detailed Explanation:** Operations like train-test splitting and Random Forest bootstrap sampling involve pseudo-random number generation. Fixing the seed guarantees that any examiner or researcher running the code obtains the exact same splits and metrics.
 - **Project Example:** `train_test_split(..., random_state=42)` and `RandomForestClassifier(..., random_state=42)`.
 
-#### Q31: How long did each model take to train on 16,000 samples?
+#### Q31: How long did each model take to train on 10,320 samples?
 - **Short Answer:** Decision Tree: 0.019s, Naive Bayes: 0.028s, KNN: 0.041s, Logistic Regression: 0.301s, Random Forest: 0.406s, Support Vector Machine: 16.342s.
 - **Detailed Explanation:** Tree-based algorithms and linear models trained in fractions of a second. SVM took significantly longer because computing kernel matrices and probability calibrations scales quadratically with dataset size ($O(N^2)$).
 - **Project Example:** Documented in `results/metrics/model_comparison.csv`.
@@ -238,7 +240,8 @@
 
 #### Q36: Summarize the final benchmark rankings of all six models.
 - **Short Answer:**
-  1. Random Forest: 98.58% Accuracy, 0.9857 F1
+  1. Decision Tree: 99.79% Accuracy, 0.7436 Macro F1
+2. Random Forest: 99.59% Accuracy, 0.7334 Macro F1
   2. Decision Tree: 98.22% Accuracy, 0.9822 F1
   3. K-Nearest Neighbors: 97.55% Accuracy, 0.9753 F1
   4. Support Vector Machine: 94.17% Accuracy, 0.9417 F1

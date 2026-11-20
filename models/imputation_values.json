@@ -1,0 +1,16 @@
+{
+  "age": 54.0,
+  "TSH": 1.4,
+  "T3": 2.0,
+  "TT4": 104.0,
+  "T4U": 0.98,
+  "FTI": 107.0,
+  "sex": 0.0,
+  "on thyroxine": 0.0,
+  "on antithyroid medication": 0.0,
+  "pregnant": 0.0,
+  "thyroid surgery": 0.0,
+  "lithium": 0.0,
+  "goitre": 0.0,
+  "tumor": 0.0
+}

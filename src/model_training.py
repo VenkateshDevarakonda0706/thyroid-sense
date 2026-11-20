@@ -146,9 +146,9 @@ def train_all_models(
 
 
 if __name__ == "__main__":
-    # Execute full pipeline
+    # Execute authentic allhypo pipeline
     data_bundle = preprocess_pipeline(save_scaler=True)
-    X_train = data_bundle["X_train_scaled"]
-    y_train = data_bundle["y_train"].values
+    X_train = data_bundle["X_train_resampled"]
+    y_train = data_bundle["y_train_resampled"]
 
     trained_bundle = train_all_models(X_train, y_train)

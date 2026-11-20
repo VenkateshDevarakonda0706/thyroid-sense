@@ -3,8 +3,8 @@
 [![Python](https://img.shields.io/badge/Python-3.11-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org/)
 [![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.9.1-F7931E.svg?style=flat&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
 [![Pandas](https://img.shields.io/badge/Pandas-3.1.1-150458.svg?style=flat&logo=pandas&logoColor=white)](https://pandas.pydata.org/)
-[![Tests](https://img.shields.io/badge/Tests-Passing%20(9%2F9)-brightgreen.svg?style=flat)](tests/)
-[![Repository](https://img.shields.io/badge/GitHub-ThyroidSense-blue.svg?style=flat&logo=github)](https://github.com/VenkateshDevarakonda0706/ThyroidSense)
+[![Tests](https://img.shields.io/badge/Tests-Passing%20(16%2F16)-brightgreen.svg?style=flat)](tests/)
+[![Repository](https://img.shields.io/badge/GitHub-thyroid--sense-blue.svg?style=flat&logo=github)](https://github.com/VenkateshDevarakonda0706/thyroid-sense)
 [![Status](https://img.shields.io/badge/Academic%20Project-B.Tech%20CSE%20AIML-blue.svg?style=flat)]()
 
 **ThyroidSense** is an end-to-end Machine Learning classification project designed, implemented, and benchmarked for undergraduate computer science and AI/ML students. This project classifies patients into four thyroid diagnostic states using clinical symptoms and objective serum hormone measurements from the UCI Thyroid Disease dataset.
@@ -40,7 +40,7 @@
 
 **Project Title:** ThyroidSense: Thyroid Disease Detection Using Machine Learning  
 **Project Identifier:** `ThyroidSense`  
-**GitHub Repository:** [https://github.com/VenkateshDevarakonda0706/ThyroidSense](https://github.com/VenkateshDevarakonda0706/ThyroidSense)  
+**GitHub Repository:** [https://github.com/VenkateshDevarakonda0706/thyroid-sense](https://github.com/VenkateshDevarakonda0706/thyroid-sense)  
 **Author:** Venkatesh Devarakonda  
 **Academic Context:** B.Tech Computer Science & Engineering (AI & ML) — Semester 2-1 Academic Project  
 
@@ -74,9 +74,16 @@ When the thyroid malfunctions, it causes widespread clinical disorders that are 
 
 ## 4. Dataset Description
 
-- **Source:** UCI Machine Learning Repository — Thyroid Disease Database.
-- **Raw Dataset (`data/raw/thyroid_raw.csv`):** 9,172+ patient records with 31 columns including demographics, medical symptoms, indicator flags, and hormone values.
-- **Processed Modeling Dataset (`data/processed/thyroid_processed.csv`):** 20,000 patient records across 15 columns (14 features + 1 target `class`), balanced to 5,000 instances per class using Random Over-sampling.
+- **Source:** UCI Machine Learning Repository — Thyroid Disease Database (contributed by J. Ross Quinlan and the Garavan Institute of Medical Research, Sydney, Australia, 1987).
+- **Authentic Benchmark Dataset:** Original single-task UCI **`allhypo`** dataset (`data/raw/uci_thyroid_original/allhypo.data` and `allhypo.test`).
+- **Partitioning & Cohort Size:**
+  - **Training Partition (`allhypo.data`):** 2,800 patient records (Negative: 2,580, Compensated: 154, Primary: 64, Secondary: 2).
+  - **Testing Partition (`allhypo.test`):** 972 untouched patient records (Negative: 901, Compensated: 40, Primary: 31, Secondary: 0).
+  - **Total Genuine Cohort:** 3,772 unique patient records with zero patient ID overlap between partitions.
+
+> [!NOTE]
+> **Dataset Provenance & Correction Note:**  
+> In preliminary project iterations, a merged 22,632-row CSV (`thyroid_raw.csv`) was explored. A forensic provenance investigation revealed that this file was created by vertically stacking six separate UCI classification subtasks (`allhypo`, `allhyper`, `dis`, `sick`, `allbp`, `allrep`) involving the same 3,772 patients. In those five other subtasks, hypothyroid patients were labeled `negative.` (as they did not have hyperthyroidism, sick euthyroid syndrome, etc.), introducing 1,712 cross-task contradictory rows. ThyroidSense has eliminated this multi-task label corruption by transitioning exclusively to the authentic single-task UCI **`allhypo`** benchmark.
 
 ### Feature Summary
 - **Demographics:** `age` (1–100 years), `sex` (0=Female, 1=Male).
@@ -106,40 +113,48 @@ For full medical documentation, see [DATASET_DOCUMENTATION.md](docs/DATASET_DOCU
 ## 6. Project Architecture
 
 ```
-                                  [Raw UCI Records]
-                                          │
-                                          ▼
-                         [Data Cleaning & Imputation]
-                         - Drop non-predictive admin cols
-                         - Median imputation for lab tests
-                         - Binary symptom encoding
-                                          │
-                                          ▼
-                               [Target Class Balancing]
-                         - Filter to 4 primary classes
-                         - RandomOverSampler (20,000 rows)
-                                          │
-                                          ▼
-                        [Stratified 80/20 Train-Test Split]
-                         - Train: 16,000 (4,000 per class)
-                         - Test:   4,000 (1,000 per class)
-                                          │
-                                          ▼
-                           [StandardScaler (Leak-Free)]
-                         - Fitted strictly on Train split
-                         - Applied to Test split
-                                          │
-                                          ▼
-                            [Model Training (6 Models)]
-                                          │
-                                          ▼
-                          [Holdout Evaluation (4,000 Test)]
-                         - Accuracy, Precision, Recall, F1
-                         - Confusion Matrices, Plots
-                                          │
-                                          ▼
-                           [Best Model Persistence]
-                         - models/best_model.pkl (Random Forest)
+                              [Authentic UCI allhypo Dataset]
+                               ├── allhypo.data (2,800 train records)
+                               └── allhypo.test (972 test records)
+                                               │
+                                               ▼
+                              [Data Cleaning & Feature Selection]
+                              - Parse 29 attributes; extract patient IDs
+                              - Exclude patient IDs from modeling features
+                              - Map binary symptoms & target classes [1, 7, 9, 11]
+                              - Strictly zero patient ID overlap between splits
+                                               │
+                                               ▼
+                                [Missing Value Imputation]
+                              - Continuous lab medians fitted STRICTLY on Train
+                              - Applied to Test partition without test leakage
+                                               │
+                                               ▼
+                              [StandardScaler (Fit BEFORE Oversampling)]
+                              - Fitted strictly on original 2,800 Train records
+                              - Preserves natural sample variance sigma
+                              - Applied to untouched 972 Test records
+                                               │
+                                               ▼
+                                [Training Partition Balancing]
+                              - RandomOverSampler applied STRICTLY to Train
+                              - Balanced to 2,580 per class (10,320 rows)
+                              - Test set remains UNTOUCHED (972 genuine observations)
+                                               │
+                                               ▼
+                                 [Model Training (6 Models)]
+                              - Logistic Regression, Decision Tree, Random Forest,
+                                KNN (k=3), SVM (RBF), Gaussian Naive Bayes
+                                               │
+                                               ▼
+                             [Holdout Evaluation (972 Test Records)]
+                              - Evaluated on authentic 972 out-of-sample test records
+                              - Macro Precision, Macro Recall, Macro F1
+                              - Zero support for Secondary Hypothyroid (support=0)
+                                               │
+                                               ▼
+                                [Best Model Persistence]
+                              - models/best_model.pkl (Decision Tree: 99.79% Acc, 0.7436 Macro F1)
 ```
 
 ---
@@ -175,7 +190,7 @@ ThyroidSense/
 │   └── generate_eda_figures.py    # Generates publication-ready figures
 │
 ├── models/
-│   ├── best_model.pkl             # Top performing model (Random Forest)
+│   ├── best_model.pkl             # Top performing model (Decision Tree: 99.79% Acc, 0.7436 Macro F1)
 │   ├── best_model_metadata.json   # Model configuration & class mapping
 │   ├── scaler.pkl                 # Fitted StandardScaler artifact
 │   └── enc.pickle                 # Original label encoder mapping
@@ -208,8 +223,8 @@ ThyroidSense/
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/VenkateshDevarakonda0706/ThyroidSense.git
-   cd ThyroidSense
+   git clone https://github.com/VenkateshDevarakonda0706/thyroid-sense.git
+   cd thyroid-sense
    ```
 2. **Create and activate a virtual environment:**
    ```powershell
@@ -254,12 +269,15 @@ jupyter notebook notebooks/
 
 ## 10. Data Preprocessing & Leakage Prevention
 
-1. **Column Pruning:** Removed non-predictive columns (`patient_id`, `referral source`, `dataset_name`) and redundant measurement flags (`TSH measured`, etc.), reducing 31 raw columns to 14 predictive features.
-2. **Missing Value Imputation:** Missing continuous laboratory tests were imputed using training set medians to protect against outlier skewness.
-3. **Categorical Encoding:** Binary features (`sex`, `on thyroxine`, `pregnant`, etc.) were encoded as 0 or 1.
-4. **Class Balancing:** Balanced the 4 primary classes to 5,000 instances each via `RandomOverSampler`.
-5. **Stratified Splitting:** Partitioned the 20,000 instances into 80% Train (16,000) and 20% Test (4,000) using `stratify=y`.
-6. **Leak-Free Standardization:** `StandardScaler` was fitted strictly on `X_train` (`scaler.fit_transform(X_train)`). The fitted scaler was applied to `X_test` via `scaler.transform(X_test)` with zero test-set information leaking into training parameters.
+1. **Column Pruning:** Removed non-predictive administrative columns (`patient_id`, `referral source`, `dataset_name`) and redundant measurement flags (`TSH measured`, etc.), reducing 31 raw columns to 14 predictive features.
+2. **Canonical Train/Test Splitting:** Loaded Ross Quinlan's authentic 1987 benchmark partition: `allhypo.data` (2,800 train records) and `allhypo.test` (972 test records), verifying strictly zero patient ID overlap between splits.
+3. **Training-Fitted Missing Value Imputation:** Missing continuous laboratory tests (`age`, `TSH`, `T3`, `TT4`, `T4U`, `FTI`) were imputed using medians learned **strictly from `X_train`** (Age: 54.0, TSH: 1.4, T3: 2.0, TT4: 104.0, T4U: 0.98, FTI: 107.0).
+4. **Categorical & Binary Mode Imputation:** Binary features (`sex`, `on thyroxine`, `pregnant`, etc.) were encoded numerically. Missing binary values were imputed using the statistical mode learned **strictly from `X_train`** (e.g., Mode(`sex`) = 0.0 [Female], Mode(symptoms) = 0.0), without assuming unknown values mean absence.
+5. **Feature Standardization BEFORE Oversampling:** `StandardScaler` was fitted strictly on the original 2,800 non-replicated training records (`scaler.fit_transform(X_train)`). This preserves the natural empirical sample variance $\sigma$ from being deflated by duplicate minority rows. The fitted scaler was applied to `X_test` via `scaler.transform(X_test)`.
+6. **Class Balancing on Training Partition ONLY:** Applied `RandomOverSampler` exclusively to scaled training data `(X_train_scaled, y_train)` to balance training classes to 2,580 instances each (10,320 total rows). The test set remained completely untouched with exactly 972 genuine out-of-sample observations.
+
+### Data Leakage Audit Summary
+In preliminary experiments, balancing before splitting duplicated rare Secondary Hypothyroid observations (only 2 genuine records total) across both splits, creating a superficial illusion of 98.6% Accuracy and 100% Precision/Recall on rare classes. The corrected pipeline isolates the test set, honestly evaluating true out-of-sample generalization.
 
 ---
 
@@ -292,13 +310,20 @@ Figures saved in `results/figures/`:
 
 ## 13. Model Training Process
 
-All models were trained on the standardized training partition (16,000 samples, 4,000 per class) with fixed random seeds (`random_state=42`):
-- **Decision Tree:** Trained in **0.019 seconds**.
-- **Naive Bayes:** Trained in **0.028 seconds**.
-- **K-Nearest Neighbors:** Fitted in **0.041 seconds**.
-- **Logistic Regression:** Converged in **0.301 seconds**.
-- **Random Forest:** Trained 100 trees in **0.406 seconds**.
-- **Support Vector Machine:** Required **16.342 seconds** due to quadratic kernel distance matrix calculations and internal probability cross-validation.
+All models were trained on the resampled training partition (10,320 records, balanced to 2,580 per class using RandomOverSampler applied strictly to scaled training features) with fixed random seeds (`random_state=42`):
+- **Decision Tree:** Trained in **0.007 seconds**.
+- **Naive Bayes:** Trained in **0.003 seconds**.
+- **K-Nearest Neighbors:** Fitted in **0.014 seconds**.
+- **Logistic Regression:** Converged in **0.061 seconds**.
+- **Random Forest:** Trained 100 trees in **0.149 seconds**.
+- **Support Vector Machine:** Required **1.953 seconds** for RBF kernel optimization.
+
+> [!IMPORTANT]
+> **Preprocessing & Scaling Execution Sequence:**
+> 1. Missing values are imputed using statistics learned strictly from original training features.
+> 2. `StandardScaler` is fitted on original training features **before** oversampling. This ensures $\mu$ and $\sigma$ reflect the true population distribution, rather than an artificially balanced distribution.
+> 3. `RandomOverSampler` is applied strictly to scaled training features. The test partition is never oversampled.
+> 4. Note on Secondary Hypothyroid: Oversampling replicates the 2 training examples to balance training updates, but does not generate new independent biological observations.
 
 ---
 
@@ -318,30 +343,46 @@ All models were trained on the standardized training partition (16,000 samples, 
 
 ## 15. Actual Measured Model Results
 
-Evaluated on 4,000 holdout test records (1,000 samples per class):
+### A. Authentic UCI llhypo Benchmark (Untouched 972-Patient Test Partition)
+Evaluated on **972 untouched test records** (llhypo.test: Negative: 901, Compensated: 40, Primary: 31, Secondary: 0):
 
-| Rank | Model | Test Accuracy | Precision (Macro) | Recall (Macro) | F1-Score (Macro) | Train Time (s) | Inference Latency (ms/sample) |
-| :---: | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| 🥇 | **Random Forest** | **98.58%** | **0.9862** | **0.9858** | **0.9857** | 0.406 s | 0.0118 ms |
-| 🥈 | **Decision Tree** | **98.22%** | **0.9827** | **0.9822** | **0.9822** | 0.019 s | 0.0008 ms |
-| 🥉 | **K-Nearest Neighbors (k=3)** | **97.55%** | **0.9768** | **0.9755** | **0.9753** | 0.041 s | 0.0970 ms |
-| 4 | **Support Vector Machine (RBF)** | **94.17%** | **0.9424** | **0.9417** | **0.9417** | 16.342 s | 0.3375 ms |
-| 5 | **Logistic Regression** | **88.25%** | **0.8821** | **0.8825** | **0.8821** | 0.301 s | 0.0008 ms |
-| 6 | **Gaussian Naive Bayes** | **64.98%** | **0.7475** | **0.6498** | **0.5725** | 0.028 s | 0.0002 ms |
+| Rank | Model | Test Accuracy | Precision (Macro) | Recall (Macro) | F1-Score (Macro) | Precision (Weighted) | Recall (Weighted) | F1-Score (Weighted) | Train Time (s) | Inference Latency (ms/sample) |
+| :---: | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| 🥇 | **Decision Tree** | **99.79%** | **0.7381** | **0.7494** | **0.7436** | **0.9980** | **0.9979** | **0.9980** | 0.016 s | 0.0010 ms |
+| 🥈 | **Random Forest** | **99.59%** | **0.7243** | **0.7429** | **0.7334** | **0.9961** | **0.9959** | **0.9959** | 0.221 s | 0.0432 ms |
+| 🥉 | **Logistic Regression** | **95.88%** | **0.6181** | **0.7114** | **0.6572** | **0.9801** | **0.9588** | **0.9679** | 0.132 s | 0.0010 ms |
+| 4 | **Support Vector Machine** | **95.37%** | **0.5649** | **0.7040** | **0.6186** | **0.9722** | **0.9537** | **0.9601** | 3.089 s | 0.8560 ms |
+| 5 | **K-Nearest Neighbors** | **94.55%** | **0.5689** | **0.5852** | **0.5733** | **0.9555** | **0.9455** | **0.9498** | 0.027 s | 0.0701 ms |
+| 6 | **Gaussian Naive Bayes** | **9.26%** | **0.3062** | **0.4043** | **0.1156** | **0.9346** | **0.0926** | **0.0826** | 0.006 s | 0.0011 ms |
+
+> [!NOTE]
+> **Majority-Class (Negative) Baseline:**
+> Predicting "Negative" for all test queries yields **92.70% Accuracy** (901/972), **Macro Precision: 0.2317**, **Macro Recall: 0.2500**, and **Macro F1: 0.2405**. Decision Tree (99.79% accuracy, 0.7436 Macro F1) and Random Forest (99.59% accuracy, 0.7334 Macro F1) significantly outperform this baseline across all medical disease classes.
+
+> [!NOTE]
+> **Model Selection Note:**
+> `best_model.pkl` (Decision Tree) was selected based on achieving the highest 4-class Macro F1 score (0.7436) among the 6 candidate classifiers on the authentic UCI test partition. It represents the top comparative benchmark performance on this historical partition rather than an independent post-selection holdout estimate. No hyperparameter tuning was conducted on the test set.
+
+> Decision Tree and Random Forest achieved strong results on the three classes represented in the original UCI test partition. Secondary Hypothyroid performance cannot be evaluated because the original test partition contains zero examples of that class.
+
+### B. Per-Class Performance Summary (Decision Tree)
+- **Compensated Hypothyroid (Class 1):** Precision = 95.24%, **Recall = 100.00%** (40/40), **F1 = 97.56%** (Support = 40)
+- **Negative / Healthy (Class 7):** Precision = 100.00%, Recall = 99.78% (899/901), F1 = 99.89% (Support = 901)
+- **Primary Hypothyroid (Class 9):** **Precision = 100.00%**, **Recall = 100.00%** (31/31), **F1 = 100.00%** (Support = 31)
+- **Secondary Hypothyroid (Class 11):** Precision = 0.00%, Recall = 0.00%, F1 = 0.00% (**Support = 0**, as all Secondary cases in the 1987 UCI benchmark were in llhypo.data)
 
 ---
 
 ## 16. Model Comparison & Discussion
 
-1. **Why Random Forest Won (98.58% Accuracy, 0.9857 Macro F1):**
-   - Endocrine diagnosis depends on threshold combinations (e.g., elevated TSH with normal vs low TT4).
-   - Random Forest's 100 decorrelated trees capture these step-function decision boundaries effortlessly, reducing individual tree variance.
-2. **Decision Tree as an Interpretable Alternative (98.22% Accuracy):**
-   - Offers near-parity performance while providing clear, transparent white-box clinical rules that physicians can inspect line-by-line.
-3. **Reproduction of Semester 2-1 Baseline Models:**
-   - KNN ($k=3$) achieved **97.55%**, and SVM achieved **94.17%**, directly validating the student's original coursework experiments.
-4. **Why Gaussian Naive Bayes Lagged (64.98% Accuracy):**
-   - Naive Bayes strictly assumes features are conditionally independent. The strong biological correlation between TT4 and FTI ($r=0.79$) violates this assumption, distorting probability calculations.
+1. **Why Decision Tree Achieved Top Performance:**
+   - The Decision Tree relied heavily on TSH, TT4, and FTI in its predictions. These features are relevant thyroid laboratory measurements, although the learned model thresholds have not been clinically validated.
+2. **Impact of Zero Support on Secondary Hypothyroidism:**
+   - In the authentic 1987 UCI benchmark, both Secondary Hypothyroid patients were placed into the training set (llhypo.data), leaving 0 samples in llhypo.test. Consequently, Secondary Hypothyroid detection performance **could not be evaluated** on the holdout test set. Macro F1 across all four classes is capped at $\sim 0.74$ because the fourth class contributes .0$.
+3. **Why Gaussian Naive Bayes Underperforms (9.26% Accuracy):**
+   - Naive Bayes assumes conditional feature independence. The strong biological correlation between TT4 and FTI ($	ext{FTI} pprox 	ext{TT4}/	ext{T4U}$) violates this assumption, distorting posterior probabilities.
+4. **Historical Comparison Note:**
+   - Results from preliminary experiments on the flawed 22,632-row merged file (	hyroid_raw.csv) suffered from multi-task label corruption (where hypothyroid patients were relabeled Negative) and are archived for academic provenance in rchive/pooled_22k_artifacts/.
 
 ---
 
@@ -357,10 +398,10 @@ A learning paradigm where the algorithm is provided input feature vectors $\math
 A supervised learning task where the target output variable is a discrete category (class label) rather than a continuous number. In our project, classification predicts one of four distinct thyroid diagnoses.
 
 ### What is Training Data?
-The subset of historical records (80%, or 16,000 samples) provided to the algorithm to optimize its internal weights and decision boundaries.
+The subset of historical records from `allhypo.data` (2,800 genuine patient records, resampled to 10,320 rows during training) provided to the algorithm to optimize its internal weights and decision boundaries.
 
 ### What is Testing Data?
-The holdout partition (20%, or 4,000 samples) strictly withheld during training. It serves as a benchmark to simulate how the model performs on new, unseen patients.
+The holdout partition from `allhypo.test` (972 genuine patient records) strictly withheld during training. It serves as an authentic out-of-sample benchmark to simulate how the model performs on new, unseen patients.
 
 ### What is Overfitting?
 When an algorithm memorizes training data noise, outliers, and quirks rather than learning generalizable patterns. It displays near-perfect training accuracy but poor test accuracy.
@@ -400,12 +441,22 @@ The harmonic mean of precision and recall: $2 \times \frac{\text{Precision} \tim
 
 ---
 
-## 18. Project Limitations
+## 18. Project Limitations & Educational Disclaimer
 
-1. **Synthetic Over-Sampling:** The balanced dataset was created using `RandomOverSampler`. While standard for academic benchmarks, clinical deployments require large-scale multi-center clinical trials.
-2. **Limited Diagnostic Scope:** The model classifies 4 primary conditions; rare disorders (e.g., Hashitoxicosis, toxic adenoma, thyroid carcinomas) are not included.
-3. **Absence of Imaging Data:** Real endocrinology integrates thyroid ultrasound scans, radioactive iodine uptake, and fine-needle aspiration biopsies.
-4. **Educational Nature:** This project is designed strictly for academic instruction and must not be used as a primary diagnostic tool in medical facilities.
+### Essential Methodological Disclosures
+- **Secondary Hypothyroid Data Scarcity:** Only two Secondary Hypothyroid examples exist in the entire original dataset, and both belong to the original training partition (`allhypo.data`).
+- **Resampling Nature:** Oversampling duplicates these examples; it does not create new independent clinical observations.
+- **Evaluation Scope:** Secondary Hypothyroid performance cannot be evaluated because the original test partition contains zero examples of that class.
+- **Historical Benchmark:** This is a historical 1987 UCI benchmark, not a modern clinical validation study.
+- **Educational Context:** The project is educational/research work and is not intended for clinical diagnosis.
+
+> [!CAUTION]
+> **Educational Academic Demonstration Only:**  
+> This project is designed, implemented, and documented strictly as an educational undergraduate engineering project for academic coursework and viva defense. It is **NOT** a certified medical diagnostic device and must **NEVER** be used to direct patient care or clinical decisions.
+
+1. **Extreme Class Imbalance:** Real clinical populations have extreme disease rarity (<1% for overt hypothyroid conditions). With only 2 total records for Secondary Hypothyroidism in the historical benchmark, holdout generalization for this sub-condition cannot be reliably claimed.
+2. **Tabular Scope vs Multimodal Clinical Practice:** Modern endocrinology integrates ultrasound imaging, fine-needle aspiration biopsy, radioactive iodine uptake, and autoimmune antibody titers (anti-TPO), which are absent from historical tabular benchmarks.
+3. **Synthetic Resampling:** Random oversampling balances training loss gradients but does not manufacture new biological diversity.
 
 ---
 
@@ -420,7 +471,7 @@ The harmonic mean of precision and recall: $2 \times \frac{\text{Precision} \tim
 
 ## 20. Conclusion
 
-This project successfully reconstructs, standardizes, and benchmarks a complete beginner-level Machine Learning project for Thyroid Disease Detection. By enforcing rigorous data hygiene, preventing data leakage, and comparing six traditional supervised algorithms, we demonstrated that **Random Forest Classifier** achieves the highest classification performance (**98.58% accuracy, 0.9857 Macro F1**). The project structure, automated tests, executable notebooks, and documentation provide an exemplary portfolio artifact suitable for academic viva presentation and professional technical interviews.
+This project successfully audits, corrects, and standardizes a complete beginner-level Machine Learning project for Thyroid Disease Detection. By identifying and eliminating data leakage (pre-split oversampling and global imputation) and implementing a rigorous leakage-free pipeline, we demonstrated that **Decision Tree Classifier** achieves the highest balanced performance (**99.79% accuracy, 0.7436 Macro F1**). The project structure, automated tests (18/18 passing), transparent leakage audit, and comprehensive documentation provide an exemplary portfolio artifact suitable for academic viva presentation and professional technical interviews.
 
 ---
 
